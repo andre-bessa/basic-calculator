@@ -1,0 +1,31 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Leiningen: uberjar",
+      "type": "process",
+      "command": "lein",
+      "windows": {
+        "command": "lein.bat"
+      },
+      "args": ["uberjar"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Leiningen: test",
+      "type": "process",
+      "command": "lein",
+      "windows": {
+        "command": "lein.bat"
+      },
+      "args": ["test"],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    }
+  ]
+}
