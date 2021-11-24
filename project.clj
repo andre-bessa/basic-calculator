@@ -4,5 +4,7 @@
   :dependencies [[org.clojure/clojure "1.10.1"]]
   :main ^:skip-aot basic-calculator.gui.main-window
   :target-path "target/%s"
+  :jar-name "basic-calculator.jar"
+  :uberjar-name "basic-calculator-standalone.jar"
   :profiles {:uberjar {:aot :all
                        :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}})

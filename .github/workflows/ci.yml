@@ -1,0 +1,39 @@
+name: Clojure CI
+on: push
+jobs:
+  ci:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+    - name: Set up Java JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: temurin
+        java-version: '11'
+    - name: Install dependencies
+      run: lein deps
+    - name: Run tests
+      run: lein test
+    - name: Uberjar
+      if: startsWith(github.ref, 'refs/tags/')
+      run: lein uberjar
+    - name: Create release notes
+      if: startsWith(github.ref, 'refs/tags/')
+      working-directory: ./target/uberjar/
+      run: |
+        echo -e '## SHA256 Checksums\n\n```' > notes.md
+        sha256sum *.jar | tee -a checksums.txt notes.md
+        echo '```' >> notes.md
+    - name: Create GitHub Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v0.1.14
+      with:
+        body_path: ./target/uberjar/notes.md
+        draft: true
+        fail_on_unmatched_files: true
+        files: |
+          ./target/uberjar/*.jar
+          ./target/uberjar/checksums.txt
